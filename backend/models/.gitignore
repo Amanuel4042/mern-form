@@ -1,9 +1,0 @@
-
-# Node module
-node_module/
-
-#Logs
-localStorage
-
-#Enviroment Files
-.env
