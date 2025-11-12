@@ -9,6 +9,7 @@ interface FormData {
   color: string;
   age: string;
   message: string;
+  photo: File | null;
 }
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
     color: "#000000",
     age: "",
     message: "",
+    photo: null,
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -60,6 +62,7 @@ export default function Home() {
           color: "#000000",
           age: "",
           message: "",
+          photo: null,
         });
       } else {
         alert("❌ " + (result.error || result.message));
@@ -195,6 +198,12 @@ export default function Home() {
             className="mt-1 w-full border rounded px-3 py-2"
           ></textarea>
         </div>
+
+{/*photo upload*/}
+<input type="file"
+        accept="image/*"
+        onChange={handleChange}
+        className="border p-2 rounded w-full"/>
 
         <button
           type="submit"
