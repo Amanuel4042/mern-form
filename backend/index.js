@@ -1,6 +1,6 @@
 
 import express  from "express";
-import { mongoDBURL } from "./config.js";
+import {mongoDBURL} from "./config.js";
 import mongoose from "mongoose";
 import {Form} from './models/formModel.js';
 import cors from "cors";
@@ -18,6 +18,12 @@ app.use(cors());
 mongoose.connect(mongoDBURL)
 .then(() => { console.log("app connected to database");
 
+})
+
+.catch ((err) => {
+console.log("mongodb connection error", err);
+})
+
     
 app.use("/",formRoutes);
 
@@ -25,5 +31,5 @@ app.use("/",formRoutes);
 app.listen(port,() =>   {
     console.log(`app is listening on port ${port}`);
 });
-})
+
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, ChangeEvent, FormEvent } from "react";
 
 interface FormData {
@@ -44,7 +46,7 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/form", {
+      const res = await fetch("http://localhost:5000/api/submit-form", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

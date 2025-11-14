@@ -4,9 +4,9 @@ export const submitForm = async (req,res)=> {
     console.log("form rescieved", req.body);
     
     const {name,email,gender,interests,
-        date,color,age,message}= req.body;
+        date,color,age,message,photoURL}= req.body;
         if (!name || !email || !gender || !date || !color || !age
-            || !message)
+            || !message || !photoURL)
             {
                 return res.status(404).json({error:"all fields are required"});
             
@@ -14,7 +14,7 @@ export const submitForm = async (req,res)=> {
 
             try {
                 const newForm =new Form({
-                    name,email,gender,interests,date,color,age,message
+                    name,email,gender,interests,date,color,age,message,photoURL
                 }); 
 
                 await newForm.save();
