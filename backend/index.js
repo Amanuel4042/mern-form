@@ -1,35 +1,25 @@
-
-import express  from "express";
-import {mongoDBURL} from "./config.js";
+import express from "express";
+import { mongoDBURL } from "./config.js";
 import mongoose from "mongoose";
-import {Form} from './models/formModel.js';
 import cors from "cors";
+import path from "path";
 import formRoutes from "./routes/formRoutes.js";
 
+const app = express();
+const port = 5000;
 
-const port= 5000;
-const app =express(); 
-
-app.use(express.json()); 
 app.use(cors());
-
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(mongoDBURL)
-.then(() => { console.log("app connected to database");
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch(err => console.log("❌ MongoDB connection error:", err));
 
-})
+app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
 
-.catch ((err) => {
-console.log("mongodb connection error", err);
-})
+app.use("/api", formRoutes); // all API routes handled in formRoutes
 
-    
-app.use("/",formRoutes);
-
-
-app.listen(port,() =>   {
-    console.log(`app is listening on port ${port}`);
+app.listen(port, () => {
+  console.log(`✅ Server running on port ${port}`);
 });
-
-

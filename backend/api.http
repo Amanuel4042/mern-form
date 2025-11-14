@@ -1,0 +1,46 @@
+### Submit Form with Photo
+POST http://localhost:5000/api/submit-form
+Content-Type: multipart/form-data; boundary=---011000010111000001101001
+
+-----011000010111000001101001
+Content-Disposition: form-data; name="name"
+
+Amanuel
+-----011000010111000001101001
+Content-Disposition: form-data; name="email"
+
+amanuel@example.com
+-----011000010111000001101001
+Content-Disposition: form-data; name="gender"
+
+male
+-----011000010111000001101001
+Content-Disposition: form-data; name="interests"
+
+coding
+-----011000010111000001101001
+Content-Disposition: form-data; name="interests"
+
+music
+-----011000010111000001101001
+Content-Disposition: form-data; name="date"
+
+2025-11-14
+-----011000010111000001101001
+Content-Disposition: form-data; name="color"
+
+#000000
+-----011000010111000001101001
+Content-Disposition: form-data; name="age"
+
+25
+-----011000010111000001101001
+Content-Disposition: form-data; name="message"
+
+Hello world!
+-----011000010111000001101001
+Content-Disposition: form-data; name="photo"; filename="myphoto.jpg"
+Content-Type: image/jpeg
+
+< ./myphoto.jpg
+-----011000010111000001101001--

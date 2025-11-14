@@ -2,7 +2,7 @@
 
 import { useState, ChangeEvent, FormEvent } from "react";
 
-interface FormData {
+interface FormDataType {
   name: string;
   email: string;
   gender: string;
@@ -15,7 +15,7 @@ interface FormData {
 }
 
 export default function Home() {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FormDataType>({
     name: "",
     email: "",
     gender: "",
@@ -28,7 +28,12 @@ export default function Home() {
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement;
+    const { name, value, type, checked, files } = e.target as HTMLInputElement;
+
+    if (type === "file" && files) {
+      setFormData((prev) => ({ ...prev, photo: files[0] }));
+      return;
+    }
 
     if (type === "checkbox") {
       setFormData((prev) => {
@@ -37,22 +42,34 @@ export default function Home() {
           : prev.interests.filter((i) => i !== value);
         return { ...prev, interests };
       });
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      return;
     }
+
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("email", formData.email);
+    data.append("gender", formData.gender);
+    data.append("date", formData.date);
+    data.append("color", formData.color);
+    data.append("age", formData.age);
+    data.append("message", formData.message);
+    formData.interests.forEach((i) => data.append("interests", i));
+    if (formData.photo) data.append("photo", formData.photo);
+
     try {
       const res = await fetch("http://localhost:5000/api/submit-form", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: data,
       });
 
       const result = await res.json();
+
       if (res.ok) {
         alert("✅ Form submitted successfully!");
         setFormData({
@@ -82,7 +99,6 @@ export default function Home() {
       >
         <h2 className="text-2xl font-bold text-center">Submit Your Info</h2>
 
-        {/* Name */}
         <div>
           <label className="block font-medium">Name:</label>
           <input
@@ -95,7 +111,6 @@ export default function Home() {
           />
         </div>
 
-        {/* Email */}
         <div>
           <label className="block font-medium">Email:</label>
           <input
@@ -108,7 +123,6 @@ export default function Home() {
           />
         </div>
 
-        {/* Gender */}
         <div>
           <label className="block font-medium">Gender:</label>
           <div className="flex gap-4 mt-1">
@@ -128,7 +142,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Interests */}
         <div>
           <label className="block font-medium">Interests:</label>
           <div className="flex gap-4 mt-1">
@@ -148,8 +161,6 @@ export default function Home() {
           </div>
         </div>
 
-
-{/* Date */}
         <div>
           <label className="block font-medium">Date:</label>
           <input
@@ -162,7 +173,6 @@ export default function Home() {
           />
         </div>
 
-        {/* Color */}
         <div>
           <label className="block font-medium">Favorite Color:</label>
           <input
@@ -175,7 +185,6 @@ export default function Home() {
           />
         </div>
 
-        {/* Age */}
         <div>
           <label className="block font-medium">Age:</label>
           <input
@@ -188,7 +197,6 @@ export default function Home() {
           />
         </div>
 
-        {/* Message */}
         <div>
           <label className="block font-medium">Message:</label>
           <textarea
@@ -201,11 +209,16 @@ export default function Home() {
           ></textarea>
         </div>
 
-{/*photo upload*/}
-<input type="file"
-        accept="image/*"
-        onChange={handleChange}
-        className="border p-2 rounded w-full"/>
+        <div>
+          <label className="block font-medium">Upload Photo:</label>
+          <input
+            type="file"
+            name="photo"
+            accept="image/*"
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+          />
+        </div>
 
         <button
           type="submit"
